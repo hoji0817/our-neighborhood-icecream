@@ -85,9 +85,43 @@ if(checkoutCart){
           return `<div class="cart-line"><div><strong>${escapeHtml(p.name)}</strong><div class="muted">${Number(p.price).toLocaleString('ko-KR')}원 × ${qty}개 = ${lineTotal.toLocaleString('ko-KR')}원</div></div><button type="button" class="btn tiny secondary" data-remove="${escapeHtml(id)}">삭제</button></div>`;
         }).join('');
         checkoutCart.innerHTML=lines;
-        checkoutCart.querySelectorAll('[data-remove]').forEach(btn=>btn.addEventListener('click',()=>{
-          const next=getCart(); delete next[btn.dataset.remove]; saveCart(next); location.reload();
-        }));
+       checkoutCart.querySelectorAll('[data-qty-minus]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const next=getCart();
+    const id=btn.dataset.qtyMinus;
+    const qty=Number(next[id]||0);
+
+    if(qty<=1){
+      delete next[id];
+    } else {
+      next[id]=qty-1;
+    }
+
+    saveCart(next);
+    location.reload();
+  });
+});
+
+checkoutCart.querySelectorAll('[data-qty-plus]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const next=getCart();
+    const id=btn.dataset.qtyPlus;
+    const qty=Number(next[id]||0);
+
+    next[id]=qty+1;
+    saveCart(next);
+    location.reload();
+  });
+});
+
+checkoutCart.querySelectorAll('[data-remove]').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const next=getCart();
+    delete next[btn.dataset.remove];
+    saveCart(next);
+    location.reload();
+  });
+});
         const storeIds=new Set(products.map(p=>p.store_id));
         const subtotal=ids.reduce((sum,id)=>sum+byId[id].price*Number(cart[id]),0);
         const quantity=ids.reduce((sum,id)=>sum+Number(cart[id]),0);
