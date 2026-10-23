@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block title %}주문하기 · 아이스동네{% endblock %}
+{% block content %}<a class="back" href="{{ url_for('index') }}">← 상품 더 보기</a><h1>배송 주문</h1><p class="muted">한 주문에는 한 매장의 상품만 담을 수 있습니다.</p>
+<div class="checkout-layout"><section class="panel"><h2>장바구니</h2><div id="checkoutCart"></div><div id="cartTotals" class="totals"></div></section>
+<section class="panel"><h2>배송 정보</h2><form method="post" id="checkoutForm">
+<input type="hidden" name="cart_json" id="cartJson">
+<label>받는 분 이름 *<input required name="name" autocomplete="name"></label>
+<label>휴대폰 번호 *<input required name="phone" type="tel" placeholder="010-1234-5678" autocomplete="tel"></label>
+<div class="form-grid"><label>시·군·구 *<select required name="city" id="checkoutCity"><option value="">선택</option>{% for city in areas %}<option>{{ city }}</option>{% endfor %}</select></label><label>구·지역 *<select required name="district" id="checkoutDistrict"><option value="">먼저 시·군·구 선택</option></select></label></div>
+<label>동·읍·면 *<input required name="neighborhood" placeholder="예: 고잔동"></label>
+<label>상세 배송 주소 *<input required name="address" placeholder="도로명 주소와 상세 주소"></label>
+<label>배송 요청사항<textarea name="memo" rows="3" placeholder="공동현관 비밀번호 등 필요한 요청사항"></textarea></label>
+<p class="small muted">현재 MVP는 주문 접수 기능이며 결제는 진행되지 않습니다. 실제 결제 전 판매자와 배송 가능 여부를 확인해야 합니다.</p>
+<button class="btn full" type="submit">주문 접수하기</button></form></section></div>{% endblock %}

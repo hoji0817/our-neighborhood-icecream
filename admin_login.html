@@ -1,0 +1,2 @@
+{% extends "base.html" %}{% block title %}관리자 로그인 · 아이스동네{% endblock %}
+{% block content %}<section class="panel narrow login"><div class="hero-emoji">🔐</div><h1>관리자 로그인</h1><p class="muted">관리자만 판매처와 상품, 주문을 관리할 수 있습니다.</p><form method="post"><label>관리자 비밀번호<input name="password" type="password" required autofocus></label><button class="btn full">로그인</button></form><p class="small muted">처음 실행 시 기본 비밀번호는 change-this-password 입니다. 운영 전 반드시 환경변수 ICE_ADMIN_PASSWORD로 변경하세요.</p></section>{% endblock %}

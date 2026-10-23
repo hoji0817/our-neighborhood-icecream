@@ -1,0 +1,2 @@
+{% extends "base.html" %}{% block title %}로그인 · 우리동네아이스크림{% endblock %}
+{% block content %}<section class="panel narrow"><h1>회원 로그인</h1><form method="post"><label>아이디<input name="username" required autocomplete="username"></label><label>비밀번호<input name="password" type="password" required autocomplete="current-password"></label><button class="btn full">로그인</button></form><p class="small muted">아직 회원이 아니신가요? <a href="{{ url_for('signup') }}"><strong>회원가입</strong></a></p></section>{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% block title %}상품 찾기 · 우리동네아이스크림{% endblock %}
+{% block content %}
+<section class="hero"><div><p class="eyebrow">우리 동네 아이스크림 배송</p><h1>오늘 먹고 싶은<br><span>아이스크림을 찾아봐요.</span></h1><p>지역과 상품을 선택하고 집에서 편하게 주문하세요.</p></div><div class="hero-emoji">🍨🍦</div></section>
+<form class="filter panel" method="get">
+  <label>시·군·구<select name="city" id="citySelect"><option value="">경기도 전체</option>{% for city in areas %}<option value="{{ city }}" {% if selected.city==city %}selected{% endif %}>{{ city }}</option>{% endfor %}</select></label>
+  <label>구·지역<select name="district" id="districtSelect" data-selected="{{ selected.district }}"><option value="">전체</option></select></label>
+  <label>동·읍·면<input name="neighborhood" placeholder="예: 고잔동" value="{{ selected.neighborhood }}"></label>
+  <label class="keyword">상품 검색<input name="q" placeholder="아이스크림 이름 또는 매장명" value="{{ selected.q }}"></label>
+  <button class="btn" type="submit">검색하기</button>
+</form>
+<nav class="category-nav" aria-label="상품 종류">
+{% for cat in ['전체','바류','콘류','펜슬류','샌드류','컵류','카톤류'] %}
+<a class="category-chip {% if selected.category == cat or (cat == '전체' and not selected.category) %}active{% endif %}" href="{{ url_for('index', city=selected.city, district=selected.district, neighborhood=selected.neighborhood, q=selected.q, category='' if cat == '전체' else cat) }}">{{ cat }}</a>
+{% endfor %}
+</nav>
+<div class="section-head"><div><h2>아이스크림 상품</h2><p>검색 결과 {{ products|length }}개 · 재고가 있는 상품만 표시됩니다.</p></div><a class="cart-link" href="{{ url_for('checkout') }}">🛒 장바구니 <b id="cartCount">0</b></a></div>
+{% if products %}
+<div class="product-grid">{% for p in products %}
+<article class="product-card">
+  <a class="product-art" href="{{ url_for('product_detail', product_id=p.id) }}">{{ ['🍦','🍫','🍈','🍨','🍓','🍧'][p.id % 6] }}</a>
+  <div class="product-info"><div class="tag">{{ p.category }}</div><div class="muted small">{{ p.city }} {{ p.district }} · {{ p.neighborhood }}</div><h3><a href="{{ url_for('product_detail', product_id=p.id) }}">{{ p.name }}</a></h3><p class="muted">{{ p.store_name }}</p><p class="desc">{{ p.description }}</p><div class="price-row"><strong>{{ money(p.price) }}</strong><span>재고 {{ p.stock }}개</span></div><div class="delivery-note">배송비 {{ money(p.delivery_fee) }} · 최소 주문 {{ money(p.min_order) }}</div>
+  <button class="btn full add-cart" data-id="{{ p.id }}" data-name="{{ p.name }}" data-price="{{ p.price }}" data-stock="{{ p.stock }}">장바구니 담기</button></div>
+</article>{% endfor %}</div>
+{% else %}<div class="empty panel"><div>🍦</div><h3>검색 결과가 없어요</h3><p>지역을 넓히거나 다른 상품명을 검색해 보세요.</p><a class="btn" href="{{ url_for('index') }}">전체 상품 보기</a></div>{% endif %}
+{% endblock %}
